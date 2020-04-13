@@ -23,11 +23,17 @@
             <keep-alive include="home">
                 <component :is="currentVue"></component>
             </keep-alive>
+            <FlashMessage position="left bottom"></FlashMessage>
         </div>
     </div>
 </template>
 
 <script>
+    import axios from 'axios';
+    import FlashMessage from '@smartweb/vue-flash-message';
+    Vue.use(axios);
+    Vue.use(FlashMessage);
+
     export default {
         name: "SettingsComponent",
         data() {

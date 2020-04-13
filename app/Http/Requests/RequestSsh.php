@@ -25,7 +25,7 @@ class RequestSsh extends FormRequest
     public function rules()
     {
         return [
-            'ssh_name' => 'required|max:255',
+            'ssh_name' => 'numeric|max:255',
             'ssh_pub_key' => 'string',
         ];
     }

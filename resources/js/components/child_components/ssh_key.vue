@@ -5,7 +5,7 @@
             <div class="card text-center">
                 <div class="card-header">Add SSH Public Key</div>
                 <div class="card-body">
-                    <form method="POST" action="settings/ssh">
+                    <form action="#" @submit.prevent="submitTask()">
                         <input type="hidden" :value="csrfToken" name="_token"/>
                         <div class="form-group row">
                             <label
@@ -18,6 +18,7 @@
                                     type="text"
                                     id="ssh_name"
                                     name="ssh_name"
+                                    v-model="ssh_name"
                                 >
                             </div>
                         </div>
@@ -33,6 +34,7 @@
                                     rows="8"
                                     id="ssh_pub_key"
                                     name="ssh_pub_key"
+                                    v-model="ssh_key"
                                 ></textarea>
                             </div>
                         </div>
@@ -66,12 +68,43 @@
 <script>
     export default {
         name: "ssh_key",
-        data() { return { csrfToken: null }},
+        data() {
+            return {
+                csrfToken: null,
+                ssh_name: null,
+                ssh_key: null
+            }
+        },
         mounted() {
             this.csrfToken = document.querySelector(
                 'meta[name="csrf-token"]'
-            ).content
+            ).content;
         },
+        methods: {
+            submitTask(){
+                let vm = this;
+
+                axios
+                    .post('/settings/ssh', {
+                        ssh_name: this.ssh_name,
+                        ssh_key: this.ssh_key
+                    })
+                    .then(function (response) {
+                        vm.flashMessage.success({
+                            time: 5000,
+                            message: response
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        vm.flashMessage.error({
+                            time: 5000,
+                            message: error
+                        });
+
+                    });
+            }
+        }
     }
 </script>
 

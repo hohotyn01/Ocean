@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\RequestSsh;
+use Illuminate\Support\Facades\Validator;
 
 class SettingsController extends Controller
 {
@@ -12,11 +12,19 @@ class SettingsController extends Controller
         return view('settings');
     }
 
-    public function settingSshPost(RequestSsh $request)
+    public function settingSshPost(Request $request)
     {
-        dd(
-            $request->input('ssh_name'),
-            $request->input('ssh_pub_key')
-        );
+        $validator = Validator::make($request->all(), [
+            'ssh_name' => 'numeric|max:255',
+            'ssh_pub_key' => 'string',
+        ]);
+
+        $response = 'success';
+
+        if ($validator->fails()) {
+          $response = response()->json($validator->messages(), 500);
+        }
+dd($validator->messages());
+        return $response;
     }
 }

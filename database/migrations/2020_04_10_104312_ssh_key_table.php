@@ -16,8 +16,8 @@ class SshKeyTable extends Migration
         Schema::create('ssh_keys', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id');
-            $table->string('name');
-            $table->text('public_key');
+            $table->string('ssh_name');
+            $table->text('ssh_key');
             $table->timestamps();
         });
     }
