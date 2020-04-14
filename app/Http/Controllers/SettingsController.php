@@ -16,15 +16,15 @@ class SettingsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'ssh_name' => 'numeric|max:255',
-            'ssh_pub_key' => 'string',
+            'ssh_key' => 'required|string',
         ]);
 
-        $response = 'success';
+        $response = response()->json(['success'], 200);
 
         if ($validator->fails()) {
-          $response = response()->json($validator->messages(), 500);
+            $response = response()->json(['errors'=>$validator->errors()], 500);
         }
-dd($validator->messages());
+
         return $response;
     }
 }
