@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RequestSsh extends FormRequest
+class SshRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,8 @@ class RequestSsh extends FormRequest
     public function rules()
     {
         return [
-            'ssh_name' => 'numeric|max:255',
-            'ssh_pub_key' => 'string',
+            'ssh_name' => 'required|string|max:100',
+            'ssh_key' => 'required|string',
         ];
     }
 

@@ -18,5 +18,6 @@ Route::group(['middleware' => 'auth'], function (){
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::get('/settings', 'SettingsController@setting')->name('settings');
-    Route::post('/settings/ssh', 'SettingsController@settingSshPost')->name('settingPost');
+    Route::post('/settings/ssh_create', 'SettingsController@createSsh');
+    Route::post('/settings/ssh_all', 'SettingsController@findSsh');
 });

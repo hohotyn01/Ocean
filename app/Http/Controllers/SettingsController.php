@@ -2,29 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use App\Services\SshKeyServices;
+use App\Http\Requests\SshRequest;
 
 class SettingsController extends Controller
 {
+    protected $sshKeyServices;
+
+    public function __construct(
+        SshKeyServices $sshKeyServices
+    ) {
+        $this->sshKeyServices = $sshKeyServices;
+    }
+
     public function setting()
     {
         return view('settings');
     }
 
-    public function settingSshPost(Request $request)
+    public function createSsh(SshRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'ssh_name' => 'numeric|max:255',
-            'ssh_key' => 'required|string',
-        ]);
+        $dataSsh = $request->only(
+            'ssh_name',
+            'ssh_key'
+        );
 
-        $response = response()->json(['success'], 200);
+        return $this->sshKeyServices->newSshKey(
+            Auth::user(),
+            $dataSsh
+        );
+    }
 
-        if ($validator->fails()) {
-            $response = response()->json(['errors'=>$validator->errors()], 500);
-        }
-
-        return $response;
+    public function findSsh()
+    {
+        return $this->sshKeyServices->findSsh(Auth::user());
     }
 }

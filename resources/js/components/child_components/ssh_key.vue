@@ -57,13 +57,19 @@
         <br>
 
         <div class="tab-content">
-            <div class="card text-center">
-                <div class="card-header">SSH Keys</div>
+            <div class="card">
+                <div class="card-header text-center">SSH Keys</div>
                 <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Name</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                        <li class="list-group-item">Vestibulum at eros</li>
+                    <ul class="list-group">
+
+
+                        <li class="list-group-item active text-center">Name</li>
+                        <li class="list-group-item" v-for="item in data_ssh.get()">
+                            {{ item.ssh_name }}
+                            <div class="text-right">
+                                <button v-on:click="say(item.id)">X</button>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -72,25 +78,6 @@
 </template>
 
 <script>
-    class Errors {
-        constructor() {
-            this.errors = {};
-        }
-
-        get(fields) {
-            if(this.errors[fields]){
-                return this.errors[fields][0];
-            }
-        }
-
-        record(errors) {
-            if(errors === 'success'){
-                return this.errors = '';
-            }
-            this.errors = errors.errors;
-        }
-    }
-
     export default {
         name: "ssh_key",
         data() {
@@ -98,25 +85,35 @@
                 csrfToken: null,
                 ssh_name: null,
                 ssh_key: null,
-                errors: new Errors()
+                errors: new Errors(),
+                data_ssh: new FindData(),
             }
         },
         mounted() {
             this.csrfToken = document.querySelector(
                 'meta[name="csrf-token"]'
             ).content;
+
+            let vm = this;
+
+            axios
+                .post('/settings/ssh_all', {})
+                    .then(function (response) {
+                        vm.data_ssh.record(response.data);
+                    })
         },
         methods: {
             submitTask(){
                 let vm = this;
 
                 axios
-                    .post('/settings/ssh', {
+                    .post('/settings/ssh_create', {
                         ssh_name: this.ssh_name,
                         ssh_key: this.ssh_key
                     })
                     .then(function (response) {
                         vm.errors.record(response.data[0]);
+
                         vm.flashMessage.success({
                             time: 5000,
                             message: 'Success'
@@ -124,11 +121,46 @@
                     })
                     .catch(function (error) {
                         vm.errors.record(error.response.data);
+
                         vm.flashMessage.error({
                             time: 5000,
                             message: 'Errors'
                         });
                     });
+            }
+        }
+    }
+
+    class FindData {
+        constructor() {
+            this.data = {};
+        }
+
+        record(data) {
+            this.data = data;
+        }
+
+        get() {
+            return this.data;
+        }
+    }
+
+    class Errors {
+        constructor() {
+            this.errors = {};
+        }
+
+        record(errors) {
+            if(errors === 'success'){
+                return this.errors = '';
+            }
+
+            this.errors = errors.errors;
+        }
+
+        get(fields) {
+            if(this.errors[fields]){
+                return this.errors[fields][0];
             }
         }
     }
