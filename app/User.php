@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Provider;
 use App\Models\SshKey;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -41,5 +42,10 @@ class User extends Authenticatable
     public function sshKey()
     {
         return $this->hasOne(SshKey::class);
+    }
+
+    public function provider()
+    {
+        return $this->belongsToMany(Provider::class);
     }
 }

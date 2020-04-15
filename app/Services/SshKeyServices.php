@@ -15,7 +15,7 @@ class SshKeyServices
         $this->sshKeyRepository = $sshKeyRepository;
     }
 
-    public function newSshKey(User $user, $request)
+    public function createSshKey(User $user, $request)
     {
         $dataSsh = $request->only(
             'ssh_name',

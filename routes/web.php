@@ -24,4 +24,7 @@ Route::group(['middleware' => 'auth'], function (){
 
     Route::post('/settings/profile_get', 'SettingsController@findProfile');
     Route::post('/settings/profile_update', 'SettingsController@updateProfile');
+
+    Route::post('/settings/token_get', 'SettingsController@findToken');
+    Route::post('/settings/token_create', 'SettingsController@createToken');
 });

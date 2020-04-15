@@ -9,7 +9,11 @@ class ProviderRepository extends BaseRepository
 {
     public function __construct(Provider $provider)
     {
-        $this->$this->setModel($provider);
+        $this->setModel($provider);
     }
 
+    public function attach($user, $token)
+    {
+        return $user->provider()->attach($token);
+    }
 }
