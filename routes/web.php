@@ -21,4 +21,7 @@ Route::group(['middleware' => 'auth'], function (){
     Route::post('/settings/ssh_create', 'SettingsController@createSsh');
     Route::post('/settings/ssh_all', 'SettingsController@findSsh');
     Route::post('/settings/ssh_delete', 'SettingsController@deleteSsh');
+
+    Route::post('/settings/profile_get', 'SettingsController@findProfile');
+    Route::post('/settings/profile_update', 'SettingsController@updateProfile');
 });

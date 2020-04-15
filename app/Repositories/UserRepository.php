@@ -7,9 +7,8 @@ use App\User;
 
 class UserRepository extends BaseRepository
 {
-    public function __construct(User $order)
+    public function __construct(User $user)
     {
-        $this->setModel($order);
+        $this->setModel($user);
     }
-
 }

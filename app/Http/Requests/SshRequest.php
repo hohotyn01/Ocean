@@ -29,5 +29,4 @@ class SshRequest extends FormRequest
             'ssh_key' => 'required|string',
         ];
     }
-
 }

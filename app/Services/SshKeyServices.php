@@ -15,13 +15,16 @@ class SshKeyServices
         $this->sshKeyRepository = $sshKeyRepository;
     }
 
-    public function newSshKey(User $user, array $dataSsh)
+    public function newSshKey(User $user, $request)
     {
+        $dataSsh = $request->only(
+            'ssh_name',
+            'ssh_key'
+        );
+
         $this->sshKeyRepository->createSshKeyRelationUser($user, $dataSsh);
 
-        $response = response()->json(['success'], 200);
-
-        return $response;
+        return response()->json(['success'], 200);
     }
 
     public function findSsh(User $user)
