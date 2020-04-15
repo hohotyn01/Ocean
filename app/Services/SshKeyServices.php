@@ -28,4 +28,19 @@ class SshKeyServices
     {
         return $this->sshKeyRepository->findSshKey($user);
     }
+
+    public function deleteSsh(User $user, int $id)
+    {
+        $result = $this->sshKeyRepository->permissionDelete(
+            $id,
+            'user_id',
+            $user->id
+        );
+
+        if ($result == 0){
+            $result = response()->json(['This value Delete Forbidden'], 404);
+        }
+
+        return $result;
+    }
 }

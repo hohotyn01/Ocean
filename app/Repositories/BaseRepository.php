@@ -30,9 +30,22 @@ class BaseRepository implements BaseInterface
         return $this->model->update($data);
     }
 
+    public function delete(int $id)
+    {
+        return $this->model->where('id', $id)->delete();
+    }
+
     public function where(string $column, $value)
     {
         return $this->model->where($column, $value)->first();
+    }
+
+    public function permissionDelete(int $id, string $column, int $column_id)
+    {
+        return $this->model
+            ->where('id', $id)
+            ->where($column, $column_id)
+            ->delete();
     }
 
     public function firstOrCreate(array $data)

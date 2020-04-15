@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeleteSshRequests;
 use Illuminate\Support\Facades\Auth;
 use App\Services\SshKeyServices;
 use App\Http\Requests\SshRequest;
@@ -37,5 +38,13 @@ class SettingsController extends Controller
     public function findSsh()
     {
         return $this->sshKeyServices->findSsh(Auth::user());
+    }
+
+    public function deleteSsh(DeleteSshRequests $deleteSshRequests)
+    {
+        return $this->sshKeyServices->deleteSsh(
+            Auth::user(),
+            $deleteSshRequests->id
+        );
     }
 }

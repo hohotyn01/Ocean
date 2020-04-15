@@ -61,15 +61,19 @@
                 <div class="card-header text-center">SSH Keys</div>
                 <div class="card-body">
                     <ul class="list-group">
-
-
                         <li class="list-group-item active text-center">Name</li>
-                        <li class="list-group-item" v-for="item in data_ssh.get()">
+                        <li
+                            class="list-group-item"
+                            v-for="item in data_ssh.get()"
+                        >
                             {{ item.ssh_name }}
                             <div class="text-right">
-                                <button v-on:click="say(item.id)">X</button>
+                                <button v-on:click="deleteSsh(item.id)">
+                                    X
+                                </button>
                             </div>
                         </li>
+                        {{errors.get('id')}}
                     </ul>
                 </div>
             </div>
@@ -94,13 +98,7 @@
                 'meta[name="csrf-token"]'
             ).content;
 
-            let vm = this;
-
-            axios
-                .post('/settings/ssh_all', {})
-                    .then(function (response) {
-                        vm.data_ssh.record(response.data);
-                    })
+            this.sshAll();
         },
         methods: {
             submitTask(){
@@ -114,9 +112,10 @@
                     .then(function (response) {
                         vm.errors.record(response.data[0]);
 
+                        vm.sshAll();
                         vm.flashMessage.success({
                             time: 5000,
-                            message: 'Success'
+                            message: 'Add success'
                         });
                     })
                     .catch(function (error) {
@@ -126,6 +125,42 @@
                             time: 5000,
                             message: 'Errors'
                         });
+                    });
+            },
+
+            deleteSsh(id){
+                var send_id = id;
+                var vm = this;
+
+                axios
+                    .post('/settings/ssh_delete', {
+                        id: send_id,
+                    })
+                    .then(function (response) {
+                        vm.sshAll();
+
+                        vm.flashMessage.success({
+                            time: 5000,
+                            message: 'Delete success'
+                        });
+                    })
+                    .catch(function (error) {
+                        vm.errors.record(error.response.data);
+
+                        vm.flashMessage.error({
+                            time: 5000,
+                            message: error.response.data[0]
+                        });
+                    });
+            },
+
+            sshAll(){
+                let vm = this;
+
+                axios
+                    .post('/settings/ssh_all', {})
+                    .then(function (response) {
+                        vm.data_ssh.record(response.data);
                     });
             }
         }

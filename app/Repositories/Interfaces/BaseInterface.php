@@ -13,6 +13,8 @@ interface BaseInterface
 
     public function update(array $data);
 
+    public function delete(int $id);
+
     public function where(string $column, $value);
 
     public function setModel(Model $model);
