@@ -49,18 +49,15 @@
                 csrfToken: '',
                 name: '',
                 email: '',
-                errors: new Errors()
+                // errors: new Errors()
             }
         },
-        async mounted() {
+        mounted() {
             this.csrfToken = document.querySelector(
                 'meta[name="csrf-token"]'
             ).content;
 
-            let response = await axios.post('/settings/profile_get');
-
-            this.name = response.data.name;
-            this.email = response.data.email;
+            this.findProfile();
         },
         methods: {
             submitTask(){
@@ -73,6 +70,7 @@
                     })
                     .then(function (response) {
                         // vm.errors.record(response.data[0]);
+                        vm.findProfile();
 
                         vm.flashMessage.success({
                             time: 5000,
@@ -81,12 +79,20 @@
                     })
                     .catch(function (error) {
                         // vm.errors.record(error.response.data);
+                        vm.findProfile();
 
                         vm.flashMessage.error({
                             time: 5000,
                             message: 'Errors'
                         });
                     });
+            },
+
+            async findProfile(){
+                let response = await axios.post('/settings/profile_get');
+
+                this.name = response.data.name;
+                this.email = response.data.email;
             }
         }
     }
