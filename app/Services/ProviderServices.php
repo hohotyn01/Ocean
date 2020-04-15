@@ -19,7 +19,7 @@ class ProviderServices
 
     public function findProvider(User $user)
     {
-        return $this->providerRepository->find($user->id);
+        return $this->providerRepository->pivot($user);
     }
 
     public function createProvider(User $user, $request)

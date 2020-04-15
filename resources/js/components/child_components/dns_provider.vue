@@ -44,6 +44,7 @@
                 'meta[name="csrf-token"]'
             ).content;
 
+            this.findToken();
         },
         methods: {
             submitTask() {
@@ -74,7 +75,7 @@
             async findToken(){
                 let response = await axios.post('/settings/token_get');
 
-                this.token = response.data.token;
+                this.token = response.data;
             }
         }
     }
